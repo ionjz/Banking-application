@@ -1,9 +1,18 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-public abstract class Transaction {
+public abstract class Transaction implements Serializable {
     private long amount;
     private LocalDateTime timeStamp;
     private String type;
+
+    public Transaction(long amount, LocalDateTime timeStamp, String type) {
+        this.amount = amount;
+        this.timeStamp = timeStamp;
+        this.type = type;
+        timeFormatter(timeStamp);
+    }
 
     public long getAmount() {
         return amount;
@@ -29,14 +38,17 @@ public abstract class Transaction {
         this.type = type;
     }
 
-    public Transaction(long amount, LocalDateTime timeStamp, String type) {
-        this.amount = amount;
-        this.timeStamp = timeStamp;
-        this.type = type;
+    public static void timeFormatter (LocalDateTime timeStamp) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        timeStamp.format(formatter);
     }
 
-    public abstract boolean validate (long amount);
-
-
-
+    @Override
+    public String toString() {
+        return "Transaction" +
+                "amount=" + amount +
+                ", timeStamp=" + timeStamp +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }
